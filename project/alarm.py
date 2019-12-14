@@ -44,7 +44,7 @@ def detect_similarity(cur_frame):
 	detected = False
 	maxs = []
 	locs = []
-	for temp in templates:
+	for temp in templates[:4]:
 		temp_w, temp_h = temp.shape[::-1] 
 		step = int((min(frame_h, frame_w) - min(temp_h, temp_w)) / 5) # min(h,w) guarantees template wont be bigger than the frame
 		for i in range(1,6):
@@ -76,7 +76,7 @@ def kpmatch(cur_frame):
 	dess = []
 	threshold = 35
 	for i in range (0,4):
-		k, d = orb.detectAndCompute(templates[i],None)
+		k, d = orb.detectAndCompute(templates[i+4],None)
 		kps.append(k)
 		dess.append(d)
 		
@@ -90,7 +90,6 @@ def kpmatch(cur_frame):
 				gkps.append(match.distance)
 		if len(kps) > 5: 
 			result = True
-	print(len(kps))
 	return result
 
 def Activate_alarm():
@@ -106,6 +105,14 @@ templates.append(template1)
 templates.append(template2)
 templates.append(template3)
 templates.append(template4)	
+template1 = cv2.imread('image_std/originals/1.jpg',0)	
+template2 = cv2.imread('image_std/originals/2.jpg',0)	
+template3 = cv2.imread('image_std/originals/3.jpg',0)	
+template4 = cv2.imread('image_std/originals/4.jpg',0)	
+templates.append(template1)
+templates.append(template2)
+templates.append(template3)
+templates.append(template4)
 inputstream = cv2.VideoCapture('input_lib/input1.mp4')
 gesture_detected = False
 while(inputstream.isOpened()):
@@ -121,8 +128,8 @@ while(inputstream.isOpened()):
 		break
 	frame = Filter(frame)
 	cv2.imwrite( "current_frame.jpg", frame );
-	gesture_detected = detect_similarity(frame)
-	# gesture_detected = kpmatch(frame)
+	#gesture_detected = detect_similarity(frame)
+	gesture_detected = kpmatch(frame)
 	if gesture_detected == True: 
 		detected_count = detected_count + 1
 		print("Detected!")
@@ -131,6 +138,10 @@ while(inputstream.isOpened()):
 			detected_count = 0
 	else: 
 		detected_count = 0
+	if cv2.waitKey(1) & 0xFF == ord('q'):
+		break
+
+inputstream.release()
 	#print(detected_count)
 		
 		

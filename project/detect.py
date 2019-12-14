@@ -20,7 +20,7 @@ def detect_similarity(cur_frame):
 	detected = False
 	maxs = []
 	locs = []
-	for temp in templates:
+	for temp in templates[:4]:
 		temp_w, temp_h = temp.shape[::-1] 
 		step = int((min(frame_h, frame_w) - min(temp_h, temp_w)) / 5) # min(h,w) guarantees template wont be bigger than the frame
 		for i in range(1,5):
@@ -73,4 +73,5 @@ def kpmatch(cur_frame):
 		# img = cv2.drawMatches(templates[i],kps[i],cur_frame,kp1,matches[:4], None, flags=2)
 		# plt.imshow(img),plt.show()		
 		
-kpmatch(cur_frame)
+#kpmatch(cur_frame)
+detect_similarity(cur_frame)
