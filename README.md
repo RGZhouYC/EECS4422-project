@@ -1,4 +1,4 @@
-# EECS4422-project
+# cv-project
 author: yucheng zhou 213169636
 
 author's comments
